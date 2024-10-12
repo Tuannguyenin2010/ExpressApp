@@ -5,7 +5,7 @@ const fs =require('fs');
 exports.getMovies = async (req, res) => {
     try {
         // Extract query parameters
-        const { title } = req.query;
+        const { title, genre, year } = req.query;
         
         // Create a filter object
         let filter = {};
@@ -14,7 +14,15 @@ exports.getMovies = async (req, res) => {
         if (title) {
             filter.title = { $regex: title, $options: 'i' }; 
         }
+        // Add genre filter if provided
+        if (genre) {
+            filter.genres = { $regex: genre, $options: 'i' }; 
+        }
 
+        // Add year filter if provided
+        if (year) {
+            filter.year = year;
+        }
         // Find movies based on the filter
         const movies = await Movie.find(filter);
 
